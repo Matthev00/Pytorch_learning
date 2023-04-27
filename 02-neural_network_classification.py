@@ -41,6 +41,26 @@ class CircleModelV1(nn.Module):
         return z
 
 
+class CircleModelV2(nn.Module):
+    """Some Information about MyModule"""
+    def __init__(self):
+        super().__init__()
+        # Create 2 nn.Linear layers capable of handling the shape of pur data
+        self.layer_1 = nn.Linear(in_features=2, out_features=10)
+        self.layer_2 = nn.Linear(in_features=10, out_features=10)
+        self.layer_3 = nn.Linear(in_features=10, out_features=1)
+        self.relu = nn.ReLU()
+
+    # Define a forward() method that outlines the forward pass
+    def forward(self, x):
+        z = self.layer_1(x)
+        z = self.relu(z)
+        z = self.layer_2(z)
+        z = self.relu(z)
+        z = self.layer_3(z)
+        return z
+
+
 # Calculate accuracy - out of 100 examples, what percantage does our model get right?
 def accuracy_fn(y_true, y_pred):
     correct = torch.eq(y_true, y_pred).sum().item()
@@ -94,46 +114,18 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 torch.device(device)
 
 # Create an instance of Model class and put it in the right device
-# model_0 = CircleModelV0().to(device)
-
-# Create a model0 in simplier way using nn.Sequential()
-model0 = nn.Sequential(
-    nn.Linear(in_features=2, out_features=5),
-    nn.Linear(in_features=5, out_features=1)
-).to(device)
-# print(model0.state_dict())
-
+model_1 = CircleModelV2().to(device)
 
 # Set up loss function and optimizer
 loss_fn = nn.BCEWithLogitsLoss()
-optimizer = torch.optim.SGD(params=model0.parameters(),
+optimizer = torch.optim.SGD(params=model_1.parameters(),
                             lr=0.1)
 
 
 # Training model
-
-# View first 5 outputs of the forward passon the test data
-model0.eval()
-with torch.inference_mode():
-    y_logits = model0(X_test.to(device))[:5]
-# print(y_logits)
-# print(y_test[:5])
-
-# Use sigmoid activation function on our model logits to turn them into prediction probabilities
-y_pred_probs = torch.sigmoid(y_logits)
-
-# Find the predicted labels
-y_preds = torch.round(y_pred_probs)
-
-# Get rid of extra dimentions
-y_preds = y_preds.squeeze()
-# print(y_preds)
-
-
-# Build training loop and testing loop
 torch.manual_seed(42)
 
-epochs = 100
+epochs = 100000
 
 # Put data to the taret device
 X_train, y_train = X_train.to(device), y_train.to(device)
@@ -142,15 +134,14 @@ X_test, y_test = X_test.to(device), y_test.to(device)
 # Build training loop
 for epoch in range(epochs):
     # Training
-    model0.train()
+    model_1.train()
 
     # Forward pass
-    y_logits = model0(X_train).squeeze()
+    y_logits = model_1(X_train).squeeze()
     y_pred = torch.round(torch.sigmoid(y_logits))
 
     # Calculate loss/accuracy
     loss = loss_fn(y_logits, y_train)
-    acc = accuracy_fn(y_true=y_train, y_pred=y_pred)
 
     # Optimizer zero grad
     optimizer.zero_grad()
@@ -162,17 +153,17 @@ for epoch in range(epochs):
     optimizer.step()
 
     # Testing
-    model0.eval()
+    model_1.eval()
     with torch.inference_mode():
         # Forward pass
-        test_logits = model0(X_test).squeeze()
-        test_pred = torch.round(torch.sigmoid(y_logits))
+        test_logits = model_1(X_test).squeeze()
+        test_pred = torch.round(torch.sigmoid(test_logits))
 
         # Calculate test loss
         test_loss = loss_fn(test_logits, y_test)
 
     # Print what's happening
-    if epoch % 10 == 0:
+    if epoch % 1000 == 0:
         print(f'Epoch: {epoch} | Loss: {loss:.5f} |v Test loss: {test_loss:.5f}')
 
 
@@ -186,11 +177,8 @@ if not Path("helper_functions.py").is_file():
 plt.figure(figsize=(12, 6))
 plt.subplot(1, 2, 1)
 plt.title("Train")
-plot_decision_boundary(model0, X_train, y_train)
+plot_decision_boundary(model_1, X_train, y_train)
 plt.subplot(1, 2, 2)
 plt.title("Test")
-plot_decision_boundary(model0, X_test, y_test)
+plot_decision_boundary(model_1, X_test, y_test)
 plt.show()
-
-model_1 = CircleModelV1().to(device)
-print(model_1)
