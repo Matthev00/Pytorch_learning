@@ -4,7 +4,6 @@ from torchvision import datasets
 from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader
 from helper_functions import accuracy_fn
-from timeit import default_timer as timer
 from torchmetrics import ConfusionMatrix
 from mlxtend.plotting import plot_confusion_matrix
 from tqdm.auto import tqdm
@@ -211,7 +210,7 @@ def make_predictions_dataloader(model: torch.nn.Module,
             image, label = image.to(device), label.to(device)
 
             pred_logit = model(image)
-            pred_prob = torch.softmax(pred_logit.squeeze(), dim=0).argmax(dim=1)
+            pred_prob = torch.softmax(pred_logit.squeeze(), dim=0).argmax(dim=1)# noqa 5501
 
             pred_probs.append(pred_prob.to("cpu"))
     return torch.cat(pred_probs)

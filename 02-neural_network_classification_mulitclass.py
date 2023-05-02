@@ -5,6 +5,7 @@ from sklearn.datasets import make_blobs
 from torchmetrics import Accuracy
 from sklearn.model_selection import train_test_split
 from helper_functions import plot_decision_boundary
+from pathlib import Path
 
 
 class BlobModel(nn.Module):
@@ -141,3 +142,11 @@ plt.show()
 
 torch_metric_accuracy = Accuracy(task="multiclass", num_classes=4).to(device)
 print(torch_metric_accuracy(test_pred, y_blob_test))
+
+
+# Save model
+model_path = Path('models')
+model_name = '02_pytorch_ntwork_classification.pth'
+model_save_path = model_path / model_name
+
+torch.save(obj=model_4.state_dict(), f=model_save_path)
