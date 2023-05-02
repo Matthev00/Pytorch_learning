@@ -61,7 +61,7 @@ class CircleModelV2(nn.Module):
         return z
 
 
-# Calculate accuracy - out of 100 examples, what percantage does our model get right?
+# Calculate accuracy - out of 100 examples, what percantage does our model get right?# noqa 5501
 def accuracy_fn(y_true, y_pred):
     correct = torch.eq(y_true, y_pred).sum().item()
     acc = (correct / len(y_pred)) / 100
@@ -164,13 +164,13 @@ for epoch in range(epochs):
 
     # Print what's happening
     if epoch % 1000 == 0:
-        print(f'Epoch: {epoch} | Loss: {loss:.5f} |v Test loss: {test_loss:.5f}')
+        print(f'Epoch: {epoch} | Loss: {loss:.5f} |v Test loss: {test_loss:.5f}')# noqa 5501
 
 
 # Visiualize Visiualize Visiualize
 # Download helper fn from repo
 if not Path("helper_functions.py").is_file():
-    request = requests.get("https://raw.githubusercontent.com/mrdbourke/pytorch-deep-learning/main/helper_functions.py")
+    request = requests.get("https://raw.githubusercontent.com/mrdbourke/pytorch-deep-learning/main/helper_functions.py")# noqa 5501
     with open("helper_functions.py", "wb") as file:
         file.write(request.content)
 

@@ -48,8 +48,8 @@ y_blob = torch.from_numpy(y_blob).type(torch.LongTensor)
 # Split data into training and test sets
 X_blob_train, X_blob_test, y_blob_train, y_blob_test = train_test_split(X_blob,
                                                                         y_blob,
-                                                                        test_size=0.2,
-                                                                        random_state=RANDOM_SEED)
+                                                                        test_size=0.2,# noqa 5501
+                                                                        random_state=RANDOM_SEED)# noqa 5501
 
 # Visulaize
 # plt.figure(figsize=(10, 7))
@@ -126,7 +126,7 @@ for epoch in range(epochs):
 
     # Print what's happening
     if epoch % 10 == 0:
-        print(f'Epoch: {epoch} | Loss: {loss:.5f} |v Test loss: {test_loss:.5f}')
+        print(f'Epoch: {epoch} | Loss: {loss:.5f} |v Test loss: {test_loss:.5f}')# noqa 5501
 
 
 plt.figure(figsize=(12, 6))

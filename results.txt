@@ -1,0 +1,3 @@
+{'model_name': 'FashionMNISTModelV0', 'model_loss': 0.4226478636264801, 'model_acc': 85.26666666666667}
+{'model_name': 'FashionMNISTModelV1', 'model_loss': 0.6214449405670166, 'model_acc': 77.45}
+{'model_name': 'FashionMNISTModelV2', 'model_loss': 0.29880085587501526, 'model_acc': 89.47333333333333}
