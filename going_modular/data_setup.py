@@ -1,7 +1,7 @@
 import os
+
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
-
 
 NUM_WORKERS = os.cpu_count()
 
@@ -33,7 +33,7 @@ def create_dataloaders(
 
     # Create datasets using datasets.ImageFolder
     train_data = datasets.ImageFolder(train_dir, transform=transform)
-    test_data = datasets.ImageFolder(test_dir, transform=transforms)
+    test_data = datasets.ImageFolder(test_dir, transform=transform)
 
     # Get class names
     class_names = train_data.classes
@@ -50,7 +50,7 @@ def create_dataloaders(
     test_dataloader = DataLoader(
         dataset=test_data,
         batch_size=batch_size,
-        shuffle=True,
+        shuffle=False,
         num_workers=num_workers,
         pin_memory=True
     )
