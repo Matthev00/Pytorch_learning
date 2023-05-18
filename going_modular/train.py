@@ -4,18 +4,38 @@ import model_builder
 import engine
 import utils
 from torchvision import transforms
+from pathlib import Path
+import argparse
 
 
-NUM_EPOCHS = 5
-BATCH_SIZE = 32
-HIDDEN_UNITS = 10
-LEARNING_RATE = 0.001
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Script train model TinyVGG')
+    parser.add_argument('--batch_size', type=int, default=32,
+                        help='Batch size for training and testing')
+    parser.add_argument('--hidden_units', type=int, default=10,
+                        help='Number of hidden units in the model')
+    parser.add_argument('--learning_rate', type=float, default=0.001,
+                        help='Learning rate for the optimizer')
+    parser.add_argument('--num_epochs', type=int, default=1,
+                        help='Number of epochs for training')
+
+    args = parser.parse_args()
+    return args
 
 
 def main():
+    # Parse arguments
+    args = parse_arguments()
+    HIDDEN_UNITS = args.hidden_units
+    NUM_EPOCHS = args.num_epochs
+    BATCH_SIZE = args.batch_size
+    LEARNING_RATE = args.learning_rate
+
     # Setup dir
-    train_dir = "data/pizza_steak_sushi/train"
-    test_dir = "data/pizza_steak_sushi/test"
+    data_path = Path("data/")
+    image_path = data_path / "pizza_steak_sushi"
+    train_dir = image_path / "train"
+    test_dir = image_path / "test"
 
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
@@ -47,9 +67,11 @@ def main():
                  epochs=NUM_EPOCHS,
                  device=device)
 
-    utils.save_model(model=model,
-                     target_dir="models",
-                     model_name="tinyVGG_model_5_epochs.pth")
+    # utils.save_model(model=model,
+    #                  target_dir="../models",
+    #                  model_name="tinyVGG_model_5_epochs.pth")
+
+    model.load_state_dict(torch.load("../models/tinyVGG_model_5_epochs.pth"))
 
 
 if __name__ == "__main__":
