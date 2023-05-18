@@ -14,7 +14,7 @@ def parse_arguments():
                         help='Batch size for training and testing')
     parser.add_argument('--hidden_units', type=int, default=10,
                         help='Number of hidden units in the model')
-    parser.add_argument('--learning_rate', type=float, default=0.001,
+    parser.add_argument('--lr', type=float, default=0.001,
                         help='Learning rate for the optimizer')
     parser.add_argument('--num_epochs', type=int, default=1,
                         help='Number of epochs for training')
@@ -29,7 +29,7 @@ def main():
     HIDDEN_UNITS = args.hidden_units
     NUM_EPOCHS = args.num_epochs
     BATCH_SIZE = args.batch_size
-    LEARNING_RATE = args.learning_rate
+    LEARNING_RATE = args.lr
 
     # Setup dir
     data_path = Path("data/")
@@ -71,7 +71,7 @@ def main():
     #                  target_dir="../models",
     #                  model_name="tinyVGG_model_5_epochs.pth")
 
-    model.load_state_dict(torch.load("../models/tinyVGG_model_5_epochs.pth"))
+    model.load_state_dict(torch.load("models/tinyVGG_model_5_epochs.pth"))
 
 
 if __name__ == "__main__":
