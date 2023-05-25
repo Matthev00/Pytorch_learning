@@ -12,3 +12,11 @@ def save_model(model: torch.nn.Module,
 
     torch.save(obj=model.state_dict(),
                f=model_save_path)
+
+
+def set_seeds(seed: int = 42):
+
+    # Set the seed for general torch operations
+    torch.manual_seed(seed)
+    # Set the seed for CUDA torch operations (ones that happen on the GPU)
+    torch.cuda.manual_seed(seed)
