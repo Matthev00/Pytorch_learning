@@ -1,7 +1,7 @@
 """
 A series of helper functions used throughout the course.
 
-If a function gets defined once and could be used over and over, it'll go in here.
+If a function gets defined once and could be used over and over, it'll go in here. # noqa 5501
 """
 import torch
 import matplotlib.pyplot as plt
@@ -10,12 +10,14 @@ from typing import List
 import torchvision
 import os
 import zipfile
+from torch.utils.tensorboard import SummaryWriter
+from datetime import datetime
 
 from pathlib import Path
 
 import requests
 
-# Walk through an image classification directory and find out how many files (images)
+# Walk through an image classification directory and find out how many files (images) # noqa 5501
 # are in each subdirectory.
 
 
@@ -32,13 +34,13 @@ def walk_through_dir(dir_path):
       name of each subdirectory
     """
     for dirpath, dirnames, filenames in os.walk(dir_path):
-        print(f"There are {len(dirnames)} directories and {len(filenames)} images in '{dirpath}'.")
+        print(f"There are {len(dirnames)} directories and {len(filenames)} images in '{dirpath}'.") # noqa 5501
 
 
-def plot_decision_boundary(model: torch.nn.Module, X: torch.Tensor, y: torch.Tensor):
+def plot_decision_boundary(model: torch.nn.Module, X: torch.Tensor, y: torch.Tensor): # noqa 5501
     """Plots decision boundaries of model predicting on X in comparison to y.
 
-    Source - https://madewithml.com/courses/foundations/neural-networks/ (with modifications)
+    Source - https://madewithml.com/courses/foundations/neural-networks/ (with modifications) # noqa 5501
     """
     # Put everything to CPU (works better with NumPy + Matplotlib)
     model.to("cpu")
@@ -73,11 +75,10 @@ def plot_decision_boundary(model: torch.nn.Module, X: torch.Tensor, y: torch.Ten
 
 # Plot linear data or training and test and predictions (optional)
 def plot_predictions(
-    train_data, train_labels, test_data, test_labels, predictions=None
-):
+    train_data, train_labels, test_data, test_labels, predictions=None):
     """
-  Plots linear training data and test data and compares predictions.
-  """
+    Plots linear training data and test data and compares predictions.
+    """
     plt.figure(figsize=(10, 7))
 
     # Plot training data in blue
@@ -174,8 +175,7 @@ def pred_and_plot_image(
     image_path: str,
     class_names: List[str] = None,
     transform=None,
-    device: torch.device = "cuda" if torch.cuda.is_available() else "cpu",
-):
+    device: torch.device = "cuda" if torch.cuda.is_available() else "cpu",):
     """Makes a prediction on a target image with a trained model and plots the image.
 
     Args:
@@ -234,6 +234,7 @@ def pred_and_plot_image(
         title = f"Pred: {target_image_pred_label} | Prob: {target_image_pred_probs.max().cpu():.3f}"
     plt.title(title)
     plt.axis(False)
+    plt.show()
 
 
 def set_seeds(seed: int(42)):
@@ -293,3 +294,29 @@ def download_data(source: str,
             os.remove(data_path / target_file)
 
     return image_path
+
+
+def create_writer(experiment_name: str,
+                  model_name: str,
+                  extra: str = None) -> SummaryWriter:
+    """
+    Creates a torch.utils.tensorboard.writer.SummaryWriter() instance saving to a specific log_dir.
+    log_dir is a combination of runs/timestamp/experiment_name/model_name/extra.
+    Where timestamp is the current date in YYYY-MM-DD format.
+
+    Args:
+        experiment_name (str): Nome of experiment.
+        model_name (str): Name of the model.
+        extra (str, optional): Anything extra to add int dir . Defaults to None.
+
+    Returns:
+        SummaryWriter: instance of a writer
+    """
+    timestamp = datetime.now().strftime("%Y-%m-%d")
+    if extra:
+        # Create log directory path
+        log_dir = os.path.join("runs", timestamp, experiment_name, model_name, extra)
+    else:
+        log_dir = os.path.join("runs", timestamp, experiment_name, model_name)
+
+    return SummaryWriter(log_dir=log_dir)

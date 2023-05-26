@@ -8,3 +8,6 @@ pizza_steak_sushi.zip
 going_modular/data/
 data/
 going_modular/__pycache__/
+07_Experiment_Tracking/runs/
+07_Experiment_Tracking/data/
+models/

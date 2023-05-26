@@ -121,7 +121,7 @@ def main():
     BATCH_SIZE = args.batch_size
     LEARNING_RATE = args.lr
 
-    # Setup dir
+    # Setup data dir
     data_path = Path("data/")
     image_path = data_path / "pizza_steak_sushi"
     train_dir = image_path / "train"
