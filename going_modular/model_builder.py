@@ -60,6 +60,7 @@ class TinyVGG(nn.Module):
 def create_effnetb0(out_features,
                     device):
     effnetb0_weights = torchvision.models.EfficientNet_B0_Weights.DEFAULT
+    transforms = effnetb0_weights.transforms()
     model = torchvision.models.efficientnet_b0(weights=effnetb0_weights).to(device) # noqa 5501
 
     for param in model.features.parameters():
@@ -75,12 +76,13 @@ def create_effnetb0(out_features,
                   bias=True).to(device))
 
     model.name = "effnetb0"
-    return model
+    return model, transforms
 
 
 def create_effnetb2(out_features,
                     device):
     effnetb2_weights = torchvision.models.EfficientNet_B2_Weights.DEFAULT
+    transforms = effnetb2_weights.transforms()
     model = torchvision.models.efficientnet_b2(weights=effnetb2_weights).to(device) # noqa 5501
 
     for param in model.features.parameters():
@@ -96,4 +98,4 @@ def create_effnetb2(out_features,
                   bias=True).to(device))
 
     model.name = "effnetb2"
-    return model
+    return model, transforms
