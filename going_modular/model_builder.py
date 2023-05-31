@@ -1,5 +1,7 @@
 import torch
 from torch import nn
+import utils
+import torchvision
 
 
 class TinyVGG(nn.Module):
@@ -53,3 +55,45 @@ class TinyVGG(nn.Module):
 
     def forward(self, x: torch.Tensor):
         return self.classifier(self.conv_block_2(self.conv_block_1(x)))
+
+
+def create_effnetb0(out_features,
+                    device):
+    effnetb0_weights = torchvision.models.EfficientNet_B0_Weights.DEFAULT
+    model = torchvision.models.efficientnet_b0(weights=effnetb0_weights).to(device) # noqa 5501
+
+    for param in model.features.parameters():
+        param.requires_grad = False
+
+    utils.set_seeds(42)
+
+    # # Set cllasifier to suit problem
+    model.classifier = nn.Sequential(
+        nn.Dropout(p=0.2, inplace=True),
+        nn.Linear(in_features=1280,
+                  out_features=out_features,
+                  bias=True).to(device))
+
+    model.name = "effnetb0"
+    return model
+
+
+def create_effnetb2(out_features,
+                    device):
+    effnetb2_weights = torchvision.models.EfficientNet_B2_Weights.DEFAULT
+    model = torchvision.models.efficientnet_b2(weights=effnetb2_weights).to(device) # noqa 5501
+
+    for param in model.features.parameters():
+        param.requires_grad = False
+
+    utils.set_seeds(42)
+
+    # # Set cllasifier to suit problem
+    model.classifier = nn.Sequential(
+        nn.Dropout(p=0.2, inplace=True),
+        nn.Linear(in_features=1408,
+                  out_features=out_features,
+                  bias=True).to(device))
+
+    model.name = "effnetb2"
+    return model
