@@ -78,7 +78,7 @@ def pred_and_store(paths: List[Path],
             pred_label = torch.argmax(input=pred_prob, dim=1)
             pred_class = class_names[pred_label.cpu()]
 
-            pred_dict["pred_prob"] = pred_prob
+            pred_dict["pred_prob"] = pred_label.item()
             pred_dict["pred_class"] = pred_class
 
             end_time = timer()
@@ -89,3 +89,27 @@ def pred_and_store(paths: List[Path],
         pred_list.append(pred_dict)
 
     return pred_list
+
+
+def predict(img: Image,
+            model: torch.nn.Module,
+            transform: torchvision.transforms,
+            class_names: List[str],
+            device="cuda"):
+
+    start_time = timer()
+
+    transformed_img = transform(img).unsqueeze(0).to(device)
+
+    model.to(device)
+    model.eval()
+
+    with torch.inference_mode():
+        pred_logit = model(transformed_img)
+        pred_prob = torch.softmax(input=pred_logit, dim=1)
+
+    pred_labels_and_probs = {class_names[i]: float(pred_prob[0][i]) for i in range(len(class_names))} # noqa 5501
+
+    pred_time = round(timer() - start_time, 5)
+
+    return pred_labels_and_probs, pred_time

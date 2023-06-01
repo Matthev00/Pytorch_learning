@@ -6,7 +6,7 @@ import data_setup # noqa 5501
 import model_builder # noqa 5501
 import engine # noqa 5501
 import utils # noqa 5501
-from helper_functions import plot_loss_curves, create_writer, download_data, pred_and_plot_image # noqa 5501
+from helper_functions import plot_loss_curves, create_writer, download_data # noqa 5501
 
 import torch # noqa 5501
 import torchvision # noqa 5501
@@ -214,7 +214,7 @@ def main():
 
     # # Predict on data
 
-    img_to_plot = 3
+    img_to_plot = 10
     test_image_path_list = list(Path(test_dir).glob("*/*.jpg"))
     img_path_sample = random.sample(population=test_image_path_list,
                                     k=img_to_plot)
