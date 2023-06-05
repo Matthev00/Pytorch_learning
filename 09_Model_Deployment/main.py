@@ -124,8 +124,8 @@ def main():
     # # Create a Gradio
     demo = gr.Interface(fn=predict,  # mapping function from input to output
                         inputs=gr.Image(type="pil"),  # what are the inputs?
-                        outputs=[gr.Label(num_top_classes=3, label="Predictions"), # what are the outputs?
-                                 gr.Number(label="Prediction time (s)")],  # our fn has two outputs, therefore we have two outputs
+                        outputs=[gr.Label(num_top_classes=3, label="Predictions"), # what are the outputs? # noqa 5501
+                                 gr.Number(label="Prediction time (s)")],  # our fn has two outputs, therefore we have two outputs # noqa 5501
                         examples=example_list,
                         title=title,
                         description=description,
